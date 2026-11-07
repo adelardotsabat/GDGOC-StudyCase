@@ -14,15 +14,15 @@ function ArrowIcon() {
   )
 }
 
-export default function Button({ to, children, variant = 'primary', arrow = true }) {
-  const base = 'inline-flex items-center font-medium transition'
-  const styles = {
-    primary: 'h-13 gap-4 rounded-btn border border-transparent bg-brand px-6 text-white hover:opacity-90',
-    link: 'gap-3 text-brand-text hover:underline',
-  }
+const styles = {
+  primary: 'h-13 gap-4 rounded-btn border border-transparent bg-brand px-6 text-white hover:opacity-90',
+  secondary: 'h-13 gap-4 rounded-btn border border-line bg-white px-6 text-brand-text hover:bg-brand-tint',
+  link: 'gap-3 text-brand-text hover:underline',
+}
 
+export default function Button({ to, children, variant = 'primary', arrow = true }) {
   return (
-    <Link to={to} className={`${base} ${styles[variant]}`}>
+    <Link to={to} className={`inline-flex items-center font-medium transition ${styles[variant]}`}>
       {children}
       {arrow && <ArrowIcon />}
     </Link>
