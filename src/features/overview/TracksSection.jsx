@@ -9,7 +9,7 @@ import SectionHeader from '../../components/ui/SectionHeader'
 import Skeleton from '../../components/ui/Skeleton'
 import { trackMeta } from './content'
 
-function TrackCard({ track, selected }) {
+export function TrackCard({ track, selected }) {
   const meta = trackMeta[track.id] ?? { label: track.tagline, tint: 'bg-surface' }
 
   return (
@@ -51,7 +51,7 @@ function TrackCard({ track, selected }) {
   )
 }
 
-function TracksSkeleton() {
+export function TracksSkeleton() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {[1, 2, 3].map((n) => (
