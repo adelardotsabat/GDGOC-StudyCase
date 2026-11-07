@@ -43,14 +43,17 @@ export default function HeroSection() {
         <div className="relative mx-auto aspect-[620/530] w-full max-w-[620px] overflow-hidden rounded-panel bg-brand-tint">
           <Asset name="hero-home" alt="" className="absolute inset-0 size-full object-cover" />
 
-          <p className="absolute top-[61%] left-[4%] -rotate-[7deg] rounded-btn border border-line bg-white px-4 py-3 text-base font-bold sm:px-5 sm:py-3.5 sm:text-[23px]">
-            hello, possibilities_
-          </p>
+        <p className="absolute top-[64.27%] left-[4.27%] -rotate-[7deg] rounded-btn border border-line bg-white px-4 py-3 text-base leading-[normal] font-bold whitespace-nowrap sm:px-5 sm:py-3.5 sm:text-[23px]">
+          hello, possibilities_
+        </p>
 
-          <p className="absolute right-[4%] bottom-[5%] flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs text-body">
-            <span className="size-2 rounded-full bg-g-green" aria-hidden="true" />
-            Built on curiosity. Rooted in UGM.
-          </p>
+        <p className="absolute top-[85.85%] left-[48.39%] flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-xs leading-[normal] whitespace-nowrap text-body">
+          <span className="size-2 rounded-full bg-g-green" aria-hidden="true" />
+          <span>
+            Built on <b className="font-bold">curiosity.</b> Rooted in{' '}
+            <b className="font-bold">UGM.</b>
+          </span>
+        </p>
         </div>
       </div>
     </section>
