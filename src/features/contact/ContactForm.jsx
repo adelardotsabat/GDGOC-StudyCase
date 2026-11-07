@@ -1,42 +1,45 @@
-import { useState } from 'react'
-import ArrowIcon from '../../components/ui/ArrowIcon'
-import { submitInquiry } from './submitInquiry'
+import { useState } from "react";
+import ArrowIcon from "../../components/ui/ArrowIcon";
+import { submitInquiry } from "./submitInquiry";
+import Asset from "../../components/ui/Asset";
 
 const initialValues = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  organization: '',
-  subject: '',
-  message: '',
+  firstName: "",
+  lastName: "",
+  email: "",
+  organization: "",
+  subject: "",
+  message: "",
   consent: false,
-}
+};
 
-const fieldId = (name) => `contact-${name}`
+const fieldId = (name) => `contact-${name}`;
 
 const inputClass =
-  'w-full rounded-btn border border-line bg-white px-4 text-[15px] text-title placeholder:text-body focus:border-brand focus:ring-2 focus:ring-brand/30 focus:outline-none aria-[invalid=true]:border-g-red'
+  "w-full rounded-btn border border-line bg-white px-4 text-[15px] text-title placeholder:text-body focus:border-brand focus:ring-2 focus:ring-brand/30 focus:outline-none aria-[invalid=true]:border-g-red";
 
 const a11y = (name, errors) => ({
   id: fieldId(name),
-  'aria-invalid': errors[name] ? 'true' : undefined,
-  'aria-describedby': errors[name] ? `${fieldId(name)}-error` : undefined,
-})
+  "aria-invalid": errors[name] ? "true" : undefined,
+  "aria-describedby": errors[name] ? `${fieldId(name)}-error` : undefined,
+});
 
 function validate(values, category, categories) {
-  const errors = {}
-  if (!values.firstName.trim()) errors.firstName = 'Please enter your first name.'
+  const errors = {};
+  if (!values.firstName.trim())
+    errors.firstName = "Please enter your first name.";
   if (!values.email.trim()) {
-    errors.email = 'Please enter your email address.'
+    errors.email = "Please enter your email address.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
-    errors.email = 'Please enter a valid email address.'
+    errors.email = "Please enter a valid email address.";
   }
-  if (!categories.some((c) => c.id === category)) errors.category = 'Please choose a category.'
-  if (!values.subject.trim()) errors.subject = 'Please add a short subject.'
+  if (!categories.some((c) => c.id === category))
+    errors.category = "Please choose a category.";
+  if (!values.subject.trim()) errors.subject = "Please add a short subject.";
   if (!values.message.trim()) {
-    errors.message = 'Please tell us a little about your question or idea.'
+    errors.message = "Please tell us a little about your question or idea.";
   }
-  return errors
+  return errors;
 }
 
 function Field({ name, label, required = false, error, children }) {
@@ -44,7 +47,7 @@ function Field({ name, label, required = false, error, children }) {
     <div className="flex flex-col gap-2.5">
       <label htmlFor={fieldId(name)} className="text-sm font-medium">
         {label}
-        {required && ' *'}
+        {required && " *"}
       </label>
       {children}
       {error && (
@@ -53,61 +56,71 @@ function Field({ name, label, required = false, error, children }) {
         </p>
       )}
     </div>
-  )
+  );
 }
 
-export default function ContactForm({ categories, category, onCategoryChange }) {
-  const [values, setValues] = useState(initialValues)
-  const [errors, setErrors] = useState({})
-  const [status, setStatus] = useState('idle') // idle | submitting | success | error
+export default function ContactForm({
+  categories,
+  category,
+  onCategoryChange,
+}) {
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
 
   const handleChange = (e) => {
-    const { name, type, value, checked } = e.target
-    setValues((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
-    setErrors((prev) => ({ ...prev, [name]: undefined }))
-  }
+    const { name, type, value, checked } = e.target;
+    setValues((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
+  };
 
   const handleCategoryChange = (e) => {
-    onCategoryChange(e.target.value)
-    setErrors((prev) => ({ ...prev, category: undefined }))
-  }
+    onCategoryChange(e.target.value);
+    setErrors((prev) => ({ ...prev, category: undefined }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const found = validate(values, category, categories)
-    setErrors(found)
+    e.preventDefault();
+    const found = validate(values, category, categories);
+    setErrors(found);
 
-    const firstInvalid = Object.keys(found)[0]
+    const firstInvalid = Object.keys(found)[0];
     if (firstInvalid) {
-      document.getElementById(fieldId(firstInvalid))?.focus()
-      return
+      document.getElementById(fieldId(firstInvalid))?.focus();
+      return;
     }
 
-    setStatus('submitting')
+    setStatus("submitting");
     try {
-      await submitInquiry({ ...values, category })
-      setStatus('success')
+      await submitInquiry({ ...values, category });
+      setStatus("success");
     } catch {
-      setStatus('error')
+      setStatus("error");
     }
-  }
+  };
 
   const reset = () => {
-    setValues(initialValues)
-    setErrors({})
-    setStatus('idle')
-  }
+    setValues(initialValues);
+    setErrors({});
+    setStatus("idle");
+  };
 
-  if (status === 'success') {
+  if (status === "success") {
     return (
       <div
         role="status"
         className="flex flex-col items-start gap-4 rounded-card bg-surface p-6 md:p-9"
       >
-        <h2 className="text-[30px] leading-[1.12] font-bold">Thanks for saying hello.</h2>
+        <h2 className="text-[30px] leading-[1.12] font-bold">
+          Thanks for saying hello.
+        </h2>
         <p className="leading-[1.55] text-body">
-          Your message has been sent. We’ll reply to{' '}
-          <strong className="font-medium text-title">{values.email}</strong> as soon as we can.
+          Your message has been sent. We’ll reply to{" "}
+          <strong className="font-medium text-title">{values.email}</strong> as
+          soon as we can.
         </p>
         <button
           type="button"
@@ -117,7 +130,7 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
           Send another message
         </button>
       </div>
-    )
+    );
   }
 
   return (
@@ -128,18 +141,30 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
     >
       <div className="flex flex-col gap-2">
         <div className="flex items-start justify-between gap-4">
-          <h2 className="text-[30px] leading-[1.12] font-bold">Send us a message</h2>
-          <span className="text-[28px] leading-none text-brand-text" aria-hidden="true">
-            ↗
-          </span>
+        <h2 className="text-[30px] leading-[1.12] font-bold">Send us a message</h2>
+        <Asset
+            name="category-joining-learning"
+            alt=""
+            className="shrink-0"
+            fallback={
+            <span className="text-[28px] leading-none text-brand-text" aria-hidden="true">
+                TEST-ASET-GAGAL
+            </span>
+            }
+        />
         </div>
         <p className="text-[13px] text-body">Fields marked * are required.</p>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 sm:gap-5">
-        <Field name="firstName" label="First name" required error={errors.firstName}>
+        <Field
+          name="firstName"
+          label="First name"
+          required
+          error={errors.firstName}
+        >
           <input
-            {...a11y('firstName', errors)}
+            {...a11y("firstName", errors)}
             name="firstName"
             value={values.firstName}
             onChange={handleChange}
@@ -150,7 +175,7 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
         </Field>
         <Field name="lastName" label="Last name">
           <input
-            {...a11y('lastName', errors)}
+            {...a11y("lastName", errors)}
             name="lastName"
             value={values.lastName}
             onChange={handleChange}
@@ -163,7 +188,7 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
 
       <Field name="email" label="Email address" required error={errors.email}>
         <input
-          {...a11y('email', errors)}
+          {...a11y("email", errors)}
           type="email"
           name="email"
           value={values.email}
@@ -176,7 +201,7 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
 
       <Field name="organization" label="University / organization">
         <input
-          {...a11y('organization', errors)}
+          {...a11y("organization", errors)}
           name="organization"
           value={values.organization}
           onChange={handleChange}
@@ -186,17 +211,24 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
         />
       </Field>
 
-      <Field name="category" label="Inquiry category" required error={errors.category}>
+      <Field
+        name="category"
+        label="Inquiry category"
+        required
+        error={errors.category}
+      >
         <div className="relative">
           <select
-            {...a11y('category', errors)}
+            {...a11y("category", errors)}
             name="category"
             value={category}
             onChange={handleCategoryChange}
             disabled={categories.length === 0}
             className={`${inputClass} h-[54px] appearance-none pr-11 disabled:opacity-60`}
           >
-            {categories.length === 0 && <option value="">Loading categories…</option>}
+            {categories.length === 0 && (
+              <option value="">Loading categories…</option>
+            )}
             {categories.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.label}
@@ -224,7 +256,7 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
 
       <Field name="subject" label="Subject" required error={errors.subject}>
         <input
-          {...a11y('subject', errors)}
+          {...a11y("subject", errors)}
           name="subject"
           value={values.subject}
           onChange={handleChange}
@@ -233,9 +265,14 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
         />
       </Field>
 
-      <Field name="message" label="Your message" required error={errors.message}>
+      <Field
+        name="message"
+        label="Your message"
+        required
+        error={errors.message}
+      >
         <textarea
-          {...a11y('message', errors)}
+          {...a11y("message", errors)}
           name="message"
           value={values.message}
           onChange={handleChange}
@@ -253,17 +290,18 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
           onChange={handleChange}
           className="mt-0.5 size-5 shrink-0 accent-brand"
         />
-        I agree that the information I share can be used to respond to this inquiry.
+        I agree that the information I share can be used to respond to this
+        inquiry.
       </label>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="submit"
-          disabled={status === 'submitting'}
+          disabled={status === "submitting"}
           className="inline-flex h-13 w-full items-center justify-center gap-4 rounded-btn bg-brand px-6 font-medium text-white transition hover:opacity-90 disabled:opacity-60 sm:w-[194px]"
         >
-          {status === 'submitting' ? (
-            'Sending…'
+          {status === "submitting" ? (
+            "Sending…"
           ) : (
             <>
               Send message
@@ -276,11 +314,11 @@ export default function ContactForm({ categories, category, onCategoryChange }) 
         </p>
       </div>
 
-      {status === 'error' && (
+      {status === "error" && (
         <p role="alert" className="text-sm text-g-red">
           Something went wrong. Please try again.
         </p>
       )}
     </form>
-  )
+  );
 }
